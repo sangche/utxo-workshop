@@ -44,8 +44,11 @@ git clone https://github.com/substrate-developer-hub/utxo-workshop.git
 In this UI demo, you will interact with the UTXO blockchain via the [Polkadot UI](https://substrate.dev/docs/en/development/front-end/polkadot-js).
 
 The following demo takes you through a scenario where:
-- Alice already owns a UTXO of value 100 upon genesis
-- Alice sends Bob a UTXO with value 50, tipping the remainder to validators
+- Alice already owns a UTXO of value 1000 upon genesis
+- Alice sends Bob a UTXO with value 120, sends herself a UTXO with value 580,
+  tipping the remainder to validators
+
+This is multiple TransactionOutputs demo.
 
 1. Compile and build a release in dev mode
 ```
@@ -97,22 +100,30 @@ cargo build --release
 }
 ```
 
-6. **Confirm that Alice already has 100 UTXO at genesis**. In `Chain State` > `Storage`, select `utxo`. Input the hash `0x76584168d10a20084082ed80ec71e2a783abbb8dd6eb9d4893b089228498e9ff`. Click the `+` notation to query blockchain state.
+6. **Confirm that Alice already has 1000 UTXO at genesis**. In `Chain State` > `Storage`, select `utxo`. Input the hash `0xcfc13fe5c575a0cee0ad857a3ea1278aff33e5f67c180359af6bb39bae939bad`. Click the `+` notation to query blockchain state.
 
     Notice that:
-    - This UTXO has a value of `100`
+    - This UTXO has a value of `1000`
     - This UTXO belongs to Alice's pubkey. You use the [subkey](https://substrate.dev/docs/en/next/development/tools/subkey#well-known-keys) tool to confirm that the pubkey indeed belongs to Alice
+		
+```sh
+subkey inspect //Alice
+```
 
-7. **Spend Alice's UTXO, giving 50 to Bob.** In the `Extrinsics` tab, invoke the `spend` function from the `utxo` pallet, using Alice as the transaction sender. Use the following input parameters:
+7. **Spend Alice's UTXO, giving 50 to Bob.** In the `Extrinsics` tab, invoke the `spend` function from the `utxo` pallet, using Alice as the transaction sender. Use the following input parameters(with 2 TransactionOutputs):
 
-    - outpoint: `0x76584168d10a20084082ed80ec71e2a783abbb8dd6eb9d4893b089228498e9ff`
-    - sigscript: `0x6ceab99702c60b111c12c2867679c5555c00dcd4d6ab40efa01e3a65083bfb6c6f5c1ed3356d7141ec61894153b8ba7fb413bf1e990ed99ff6dee5da1b24fd83`
-    - value: `50`
+    - outpoint: `0xcfc13fe5c575a0cee0ad857a3ea1278aff33e5f67c180359af6bb39bae939bad`
+    - sigscript: `0xbc891950e38785baa4954195e750cb6c846d5cbb04bfe8b207931fce6192c76386c1b9fa12bfbcb967029192260194ad20254ed96d00976700c61a7f5c27ae8a`
+    - value: `120`
     - pubkey: `0x8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48`
+		- value: `580`
+		- pubkey: `0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d`
 
     Send this as an `unsigned` transaction. With UTXO blockchains, the proof is already in the `sigscript` input.
 
-8. **Verify that your transaction succeeded**. In `Chain State`, look up the newly created UTXO hash: `0xdbc75ab8ee9b83dcbcea4695f9c42754d94e92c3c397d63b1bc627c2a2ef94e6` to verify that a new UTXO of 50, belonging to Bob, now exists! Also you can verify that Alice's original UTXO has been spent and no longer exists in UtxoStore.
+8. **Verify that your transaction succeeded**. In `Chain State`, look up the newly created 2 UTXO hashes: First one `0xf5171e38f877fae0d04f316586ec2640eac9f1c58ce76e5c91bbc00a6b0d2d0a` to verify that a new UTXO of 120, belonging to Bob;
+Second one `0x6b099ef24a3af636813cf6b7f341ab053d89d116f407c07d5ca536f588dcb92b` to verify that a new UTXO of 580, belonging to Alice, now exist! 
+Also you can verify that Alice's original UTXO has been spent and no longer exists in UtxoStore.
 
 *Coming soon: A video walkthrough of the above demo.*
 
