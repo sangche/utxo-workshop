@@ -125,7 +125,7 @@ fn testnet_genesis(
 			.iter()
 			.map(|x|
 				utxo::TransactionOutput {
-					value: 100 as utxo::Value,
+					value: 1000 as utxo::Value,
 					pubkey: H256::from_slice(x.as_slice()),
 				}
 			)
