@@ -33,10 +33,10 @@ cargo install --git https://github.com/alexcrichton/wasm-gc
 
 ### 2. Clone this workshop
 
-Clone your copy of the workshop codebase
+Clone your copy of this workshop codebase(not from substrate-developer-hub).
 
 ```zsh
-git clone https://github.com/substrate-developer-hub/utxo-workshop.git
+git clone https://github.com/sangche/utxo-workshop.git
 ```
 
 ## UI Demo
@@ -45,10 +45,10 @@ In this UI demo, you will interact with the UTXO blockchain via the [Polkadot UI
 
 The following demo takes you through a scenario where:
 - Alice already owns a UTXO of value 1000 upon genesis
-- Alice sends Bob a UTXO with value 120, sends herself a UTXO with value 580,
+- Alice sends Bob a UTXO with value 120. At the same time, she sends herself a UTXO with value 580,
   tipping the remainder to validators
 
-This is multiple TransactionOutputs demo.
+So, this is multiple TransactionOutputs demo.
 
 1. Compile and build a release in dev mode
 ```
@@ -67,7 +67,7 @@ cargo build --release
 ./target/release/utxo-workshop purge-chain --dev
 ```
 
-3. In the console, notice the helper printouts. In particular, notice the default account `Alice` was already has `100 UTXO` upon the genesis block.
+3. In the console, notice the helper printouts. In particular, notice the default account `Alice` already has `1000 UTXO` upon the genesis block.
 
 4. Open [Polkadot JS](https://polkadot.js.org/apps/#/settings), making sure the client is connected to your local node by going to Settings > General, and selecting `Local Node` in the `remote node` dropdown.
 
@@ -106,18 +106,18 @@ cargo build --release
     - This UTXO has a value of `1000`
     - This UTXO belongs to Alice's pubkey. You use the [subkey](https://substrate.dev/docs/en/next/development/tools/subkey#well-known-keys) tool to confirm that the pubkey indeed belongs to Alice
 		
-```sh
+```zsh
 subkey inspect //Alice
 ```
 
-7. **Spend Alice's UTXO, giving 50 to Bob.** In the `Extrinsics` tab, invoke the `spend` function from the `utxo` pallet, using Alice as the transaction sender. Use the following input parameters(with 2 TransactionOutputs):
+7. **Spend Alice's UTXO, giving 120 to Bob, 580 to herself** In the `Extrinsics` tab, invoke the `spend` function from the `utxo` pallet, using Alice as the transaction sender. Use the following input parameters(for 2 TransactionOutputs):
 
     - outpoint: `0xcfc13fe5c575a0cee0ad857a3ea1278aff33e5f67c180359af6bb39bae939bad`
     - sigscript: `0xbc891950e38785baa4954195e750cb6c846d5cbb04bfe8b207931fce6192c76386c1b9fa12bfbcb967029192260194ad20254ed96d00976700c61a7f5c27ae8a`
     - value: `120`
     - pubkey: `0x8eaf04151687736326c9fea17e25fc5287613693c912909cb226aa4794f26a48`
-		- value: `580`
-		- pubkey: `0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d`
+    - value: `580`
+    - pubkey: `0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d`
 
     Send this as an `unsigned` transaction. With UTXO blockchains, the proof is already in the `sigscript` input.
 
